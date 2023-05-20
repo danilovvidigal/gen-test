@@ -4,6 +4,7 @@ import { AppComponent } from './app.component';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('AppComponent', () => {
   let fixture: ComponentFixture<AppComponent>;
@@ -11,12 +12,14 @@ describe('AppComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
+      declarations: [AppComponent],
       imports: [
         RouterTestingModule,
         MatSidenavModule,
         MatIconModule,
-        MatToolbarModule],
-      declarations: [AppComponent]
+        MatToolbarModule,
+        BrowserAnimationsModule
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(AppComponent);
@@ -29,12 +32,13 @@ describe('AppComponent', () => {
   });
 
   it(`should have as title 'gen-test'`, () => {
-    expect(component.title).toEqual('gen-test');
+    const fixture = TestBed.createComponent(AppComponent);
+		const app = fixture.componentInstance;
+    expect(app.title).toEqual('gen-test');
   });
 
   it('should render title', () => {
     const compiled = fixture.nativeElement;
-    expect(compiled.querySelector('.content span').textContent).toContain('gen-test app is running!');
+    expect(compiled.querySelector('.content').textContent).toContain('gen-test app is running!');
   });
 });
-2

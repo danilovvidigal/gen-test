@@ -1,25 +1,37 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
+import { EditDialogComponent } from "./edit-dialog.component";
+import { RouterTestingModule } from "@angular/router/testing";
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef, MatDialogTitle } from "@angular/material/dialog";
 
-import { EditDialogComponent } from './edit-dialog.component';
 
-describe('EditDialogComponent', () => {
+describe("EditDialogComponent", () => {
+
   let component: EditDialogComponent;
   let fixture: ComponentFixture<EditDialogComponent>;
 
+  const dialogMock = {
+    close: () => { }
+   };
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ EditDialogComponent ]
+      declarations: [EditDialogComponent],
+      imports: [
+        RouterTestingModule,
+        MatDialogModule    
+      ],
+      providers: [
+        {provide: MatDialogTitle, useValue: {}},
+         {provide: MatDialogRef, useValue: dialogMock},
+         {provide: MAT_DIALOG_DATA, useValue: []}]
     })
     .compileComponents();
-  });
-
-  beforeEach(() => {
     fixture = TestBed.createComponent(EditDialogComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });
