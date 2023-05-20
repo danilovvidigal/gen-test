@@ -1,3 +1,62 @@
-.editableData{
+.mat-form-field {
+  width: 100%;
+  max-width: 100%;
+  margin: 0px auto;
+  padding: 40px;
+}
+
+.buttonChangesIsClear {
+  width: 22vw;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  margin: 0.5rem;
+}
+
+@media (max-width: 1024px) {
+  .buttonChangesIsClear {
+    width: 25%;
+    height: 5vw;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+@media (max-width: 912px) {
+  .buttonChangesIsClear {
     width: 100%;
+    height: 12vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+@media (max-width: 500px) {
+  .buttonChangesIsClear {
+    width: 100%;
+    height: 25vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+@media (max-width: 280px) {
+  .buttonChangesIsClear {
+    width: 100%;
+    height: 30vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+:host ::ng-deep .mat-form-field {
+  width: 98%;
+  padding: 20px;
 }

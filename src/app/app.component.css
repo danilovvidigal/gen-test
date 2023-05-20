@@ -1,6 +1,17 @@
 mat-drawer-container {
   display: block;
   height: 100%;
+  
+  }
+
+  :host ::ng-deep mat-list {
+   position: relative;
+   top: 8%;
+  }
+
+  :host ::ng-deep .mat-drawer-inner-container {
+    position: relative;
+    bottom: 10%;
   }
 
 mat-list-item:hover{
@@ -13,9 +24,10 @@ mat-list-item:hover{
 
 mat-drawer{
   background-color: #7EBC0A;
+  padding: 2%;
 }
 
 .toolbarGen {
-    margin-bottom: 0.1em;
+    margin-bottom: 1px;
     background-color: #7EBC0A;
 }

@@ -2,9 +2,7 @@
     <button mat-icon-button (click)="sideMenuToggle(sideMenu)">
         <mat-icon>menu</mat-icon>
     </button>
-    <span>
-        Gen Test
-    </span>
+    <span class="content">gen-test app is running!</span>
 </mat-toolbar>
 
 <mat-drawer-container>
@@ -15,7 +13,7 @@
             <mat-list-item class="whiteText" [routerLink]="['/thanks-page']" routerLinkActive="active" (click)="sideMenuToggle(sideMenu)">Thanks page</mat-list-item>
         </mat-list>
     </mat-drawer>
-    <mat-drawer-content>
+    <mat-drawer-content> 
         <router-outlet></router-outlet>
     </mat-drawer-content>
 </mat-drawer-container>

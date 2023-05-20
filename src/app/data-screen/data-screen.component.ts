@@ -1,52 +1,85 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { GetDataService } from "services/get-data.service";
+import { ItemDto } from "./../shared/item.model";
+import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
+import { ActivatedRoute, Router } from "@angular/router";
+import { FormGroup, FormControl } from "@angular/forms";
+import { Location } from "@angular/common";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { Validators } from "@angular/forms";
+import { SnackBarService } from './data-screen-service/data-screen.service';  
 
 @Component({
-  selector: 'app-data-screen',
-  templateUrl: './data-screen.component.html',
-  styleUrls: ['./data-screen.component.css']
+  selector: "app-data-screen",
+  templateUrl: "./data-screen.component.html",
+  styleUrls: ["./data-screen.component.css"],
 })
 export class DataScreenComponent implements OnInit {
+  itemDto!: ItemDto[];
+  form!: FormGroup;
 
-  // Recieving data from EditDialog component
-  itemDataId = this.route.snapshot.paramMap.get('itemDataId');
-  itemDataUserId = this.route.snapshot.paramMap.get('itemDataUserId');
-  itemDataTitle = this.route.snapshot.paramMap.get('itemDataTitle');
-  itemDataBody = this.route.snapshot.paramMap.get('itemDataBody');
+  @ViewChild("titleData") titleData: ElementRef<HTMLInputElement> | undefined;
+  @ViewChild("bodyData") bodyData: ElementRef<HTMLInputElement> | undefined;
 
-  // Organizing recieved data into itemData object
-  itemData = {
-    id: this.itemDataId,
-    userId: this.itemDataUserId,
-    title: this.itemDataTitle,
-    body: this.itemDataBody
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private dataService: GetDataService,
+    private location: Location,
+    private snackBar: MatSnackBar,
+    private snackBarService: SnackBarService,
+  ) {}
+
+  ngOnInit(): void {
+    this.itemDto = this.route.snapshot.data.item;
+    if (this.itemDto && this.itemDto.length > 0) {
+      this.form = new FormGroup({
+        id: new FormControl(this.itemDto[0].id || null),
+        userId: new FormControl(this.itemDto[0].userId || null),
+        dataTitle: new FormControl(
+          this.itemDto[0].title || null,
+          Validators.required
+        ),
+        dataBody: new FormControl(
+          this.itemDto[0].body || null,
+          Validators.required
+        ),
+      });
+    }
   }
-
-  // Getting template elements to be able to manipulate data
-  @ViewChild('titleData') titleData:ElementRef<HTMLInputElement> | undefined;
-  @ViewChild('bodyData') bodyData:ElementRef<HTMLInputElement> | undefined;
   
-  constructor(private route: ActivatedRoute, private router: Router) {
-    
-   }
 
-  ngOnInit(): void {  }
-
-  // Method used to revert changes made on clicked item data
-  revertChanges(){
-    this.titleData?.nativeElement.setAttribute('value', String(this.itemData.title));
-    this.bodyData?.nativeElement.setAttribute('value', String(this.itemData.body));
+  getItemById(id: number) {
+    this.dataService
+      .getDataById(id)
+      .subscribe((response) => (this.itemDto = response));
   }
 
-  //  Alters (only locally) data recieved from given URL (that is coming through DisplayDataComponent)
-  applyChanges(){
-    this.itemData.title = String(this.titleData?.nativeElement.value);
-    this.itemData.body = String(this.bodyData?.nativeElement.value);
-    this.router.navigate(['/display-data', {
-      newTitle: this.itemData.title, 
-      newBody: this.itemData.body,
-      id: this.itemData.id  
-    }])
+  revertChanges(form: FormGroup) {
+    form.get("dataTitle")?.setValue(null);
+    form.get("dataBody")?.setValue(null);
   }
 
+  aapplyChanges() {
+    if (this.form.valid) {
+      this.dataService.putData(this.form.value).subscribe({
+        next: (result) => {
+          console.log(JSON.stringify(result));
+          this.snackBarService.openSuccessMessage('Edição concluída com sucesso!');
+        },
+        error: (_error) => {
+          this.snackBarService.openErrorMessage('Algo deu errado, contate o suporte!');
+        },
+        complete: () => {
+          this.location.back();
+        },
+      });
+    } else {
+      this.snackBarService.openErrorMessage('Preencha todos os campos obrigatórios');
+    }
+  }
+  error(mensagem: string) {
+    this.snackBar.open(mensagem, "Fechar", {
+      duration: 3000,
+    });
+  }
 }
